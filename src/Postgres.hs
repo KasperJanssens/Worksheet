@@ -39,6 +39,9 @@ draai =
    runStderrLoggingT $ withPostgresqlPool connStr 10 $ \pool -> liftIO $
       flip runSqlPersistMPool pool $ do
         runMigration migrateAll
+        utcTime <- liftIO getCurrentTime
+        let today = utctDay utcTime
+        timeId <- insert $ Work today utcTime utcTime
 
         michaelId <- insert $ Person "Michael" 26
         michael <- get michaelId
